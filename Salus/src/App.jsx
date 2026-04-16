@@ -1,8 +1,9 @@
 import { useAppointments } from './hooks/useAppointments'
 import { AppointmentList } from './components/AppointmentList'
+import { AppointmentForm } from './components/AppointmentForm'
 
 function App() {
-  const { appointments, cancel, loading, error } = useAppointments()
+  const { appointments, cancel, create, loading, creating, error } = useAppointments()
 
   return (
     <div style={{ maxWidth: 520, margin: '40px auto', fontFamily: 'sans-serif' }}>
@@ -12,6 +13,7 @@ function App() {
           ⚠️ {error}
         </p>
       )}
+      <AppointmentForm onCreate={create} creating={creating} />
       <AppointmentList appointments={appointments} onCancel={cancel} loading={loading} />
       <p style={{ color: '#666', fontSize: 13 }}>
         {appointments.filter(a => a.status === 'cancelled').length} / {appointments.length} annulés
