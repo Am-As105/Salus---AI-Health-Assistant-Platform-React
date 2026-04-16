@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { cancelAppointment, createAppointment } from '../api/appointmentApi'
+import { useState, useEffect } from 'react'
+import { cancelAppointment, createAppointment, fetchAppointments } from '../api/appointmentApi'
 
 const INITIAL = [
   { id: 1, name: 'Consultation Dr. Martin', status: 'active' },
@@ -8,10 +8,18 @@ const INITIAL = [
 ]
 
 export function useAppointments() {
-  const [appointments, setAppointments] = useState(INITIAL)
+  const [appointments, setAppointments] = useState([])
+  const [fetching, setFetching] = useState(true)
   const [loading, setLoading] = useState(null)
   const [creating, setCreating] = useState(false)
   const [error, setError] = useState(null)
+
+  useEffect(() => {
+    fetchAppointments()
+      .then(setAppointments)
+      .catch(err => setError(err.message))
+      .finally(() => setFetching(false))
+  }, [])
 
   const cancel = async (id) => {
     setLoading(id)
@@ -41,5 +49,5 @@ export function useAppointments() {
     }
   }
 
-  return { appointments, cancel, create, loading, creating, error }
+  return { appointments, cancel, create, loading, creating, fetching, error }
 }
