@@ -1,4 +1,7 @@
 export function AppointmentList({ appointments, onCancel, loading }) {
+  if (!appointments.length)
+    return <p style={{ color: '#999', textAlign: 'center', padding: '20px 0' }}>Aucun rendez-vous trouvé.</p>
+
   return (
     <ul style={{ listStyle: 'none', padding: 0 }}>
       {appointments.map(a => (
