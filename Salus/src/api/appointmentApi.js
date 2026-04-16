@@ -5,3 +5,14 @@ export async function cancelAppointment(id) {
   if (!res.ok) throw new Error(`Échec annulation (${res.status})`)
   return id
 }
+
+export async function createAppointment(data) {
+  const res = await fetch(`${BASE_URL}/todos`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ title: data.name, completed: false }),
+  })
+  if (!res.ok) throw new Error(`Échec création (${res.status})`)
+  const json = await res.json()
+  return { id: json.id, name: data.name, doctor: data.doctor, date: data.date, status: 'active' }
+}
