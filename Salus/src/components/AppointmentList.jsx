@@ -5,6 +5,8 @@ export function AppointmentList({ appointments, onCancel, loading }) {
         <li key={a.id} style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10, padding: '8px 12px', border: '1px solid #e0e0e0', borderRadius: 6 }}>
           <span style={{ flex: 1, textDecoration: a.status === 'cancelled' ? 'line-through' : 'none', color: a.status === 'cancelled' ? '#999' : '#000' }}>
             {a.name}
+            {a.doctor && <span style={{ display: 'block', fontSize: 12, color: '#666' }}>👨‍⚕️ {a.doctor}</span>}
+            {a.date && <span style={{ display: 'block', fontSize: 12, color: '#666' }}>📅 {a.date}</span>}
           </span>
           <span style={{ fontSize: 12, padding: '2px 8px', borderRadius: 12, background: a.status === 'cancelled' ? '#fdecea' : '#e8f5e9', color: a.status === 'cancelled' ? '#c62828' : '#2e7d32' }}>
             {a.status === 'cancelled' ? 'Annulé' : 'Actif'}
