@@ -10,6 +10,7 @@ function Navbar({ user, onLogout }) {
       <Link to="/" style={{ color: '#fff', textDecoration: 'none', fontWeight: 700, fontSize: 18 }}>🏥 Salus</Link>
       <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
         <span style={{ fontSize: 14 }}>👤 {user.name}</span>
+        <Link to="/profile" style={{ color: '#fff', fontSize: 13, textDecoration: 'none', padding: '5px 12px', background: 'rgba(255,255,255,0.15)', borderRadius: 6, border: '1px solid rgba(255,255,255,0.3)' }}>Mon profil</Link>
         <button
           onClick={onLogout}
           style={{ padding: '5px 14px', background: 'rgba(255,255,255,0.15)', color: '#fff', border: '1px solid rgba(255,255,255,0.4)', borderRadius: 6, cursor: 'pointer', fontSize: 13 }}
