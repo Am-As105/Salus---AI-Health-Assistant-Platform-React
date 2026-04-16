@@ -1,25 +1,27 @@
 import { createContext, useContext, useState } from 'react'
 import { getMe } from '../api/userApi'
+import { loginApi } from '../api/authApi'
+import { tokenStorage } from '../utils/tokenStorage'
 
 const AuthContext = createContext(null)
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(() => {
-    const saved = localStorage.getItem('salus_user')
-    return saved ? JSON.parse(saved) : null
-  })
+  const [user, setUser] = useState(() => tokenStorage.getUser())
   const [profileLoading, setProfileLoading] = useState(false)
 
   const login = async (email, password) => {
-    if (!email || !password) throw new Error('Email et mot de passe requis')
-    const base = { email, name: email.split('@')[0], id: 1 }
-    localStorage.setItem('salus_user', JSON.stringify(base))
+    const { token, userId } = await loginApi(email, password)
+    tokenStorage.setToken(token)
+
+    const base = { email, name: email.split('@')[0], id: userId }
+    tokenStorage.setUser(base)
     setUser(base)
+
     setProfileLoading(true)
     try {
-      const profile = await getMe(base.id)
+      const profile = await getMe(userId)
       const enriched = { ...base, ...profile }
-      localStorage.setItem('salus_user', JSON.stringify(enriched))
+      tokenStorage.setUser(enriched)
       setUser(enriched)
     } catch (_) {
       // profil non critique, on garde les infos de base
@@ -29,7 +31,7 @@ export function AuthProvider({ children }) {
   }
 
   const logout = () => {
-    localStorage.removeItem('salus_user')
+    tokenStorage.clear()
     setUser(null)
   }
 
