@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { cancelAppointment } from '../api/appointmentApi'
+import { cancelAppointment, createAppointment } from '../api/appointmentApi'
 
 const INITIAL = [
   { id: 1, name: 'Consultation Dr. Martin', status: 'active' },
@@ -10,6 +10,7 @@ const INITIAL = [
 export function useAppointments() {
   const [appointments, setAppointments] = useState(INITIAL)
   const [loading, setLoading] = useState(null)
+  const [creating, setCreating] = useState(false)
   const [error, setError] = useState(null)
 
   const cancel = async (id) => {
@@ -27,5 +28,18 @@ export function useAppointments() {
     }
   }
 
-  return { appointments, cancel, loading, error }
+  const create = async (data) => {
+    setCreating(true)
+    setError(null)
+    try {
+      const newAppointment = await createAppointment(data)
+      setAppointments(prev => [newAppointment, ...prev])
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setCreating(false)
+    }
+  }
+
+  return { appointments, cancel, create, loading, creating, error }
 }
