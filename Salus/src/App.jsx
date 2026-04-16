@@ -1,24 +1,24 @@
 import { useAppointments } from './hooks/useAppointments'
-import { AppointmentList } from './components/AppointmentList'
 import { AppointmentForm } from './components/AppointmentForm'
-import { AppointmentSkeleton } from './components/LoadingSpinner'
+import { AppointmentsPage } from './pages/AppointmentsPage'
 
 function App() {
-  const { appointments, cancel, create, loading, creating, fetching, error } = useAppointments()
+  const { create, creating, error } = useAppointments()
 
   return (
-    <div style={{ maxWidth: 520, margin: '40px auto', fontFamily: 'sans-serif' }}>
-      <h2>Salus — Mes rendez-vous</h2>
-      {error && (
-        <p style={{ color: '#c62828', background: '#fdecea', padding: '8px 12px', borderRadius: 4 }}>
-          ⚠️ {error}
-        </p>
-      )}
-      <AppointmentForm onCreate={create} creating={creating} />
-      {fetching ? <AppointmentSkeleton /> : <AppointmentList appointments={appointments} onCancel={cancel} loading={loading} />}
-      <p style={{ color: '#666', fontSize: 13 }}>
-        {appointments.filter(a => a.status === 'cancelled').length} / {appointments.length} annulés
-      </p>
+    <div style={{ minHeight: '100vh', background: '#f4f6f9' }}>
+      <header style={{ background: '#1565c0', color: '#fff', padding: '14px 24px', marginBottom: 0 }}>
+        <h1 style={{ margin: 0, fontSize: 20 }}>🏥 Salus — Assistant Santé</h1>
+      </header>
+      <div style={{ maxWidth: 620, margin: '24px auto', padding: '0 16px' }}>
+        {error && (
+          <p style={{ color: '#c62828', background: '#fdecea', padding: '10px 14px', borderRadius: 6, marginBottom: 16 }}>
+            ⚠️ {error}
+          </p>
+        )}
+        <AppointmentForm onCreate={create} creating={creating} />
+      </div>
+      <AppointmentsPage />
     </div>
   )
 }
