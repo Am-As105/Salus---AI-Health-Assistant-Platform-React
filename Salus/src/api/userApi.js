@@ -1,9 +1,9 @@
+import { httpClient } from '../utils/httpClient'
+
 const BASE_URL = 'https://jsonplaceholder.typicode.com'
 
 export async function getMe(userId = 1) {
-  const res = await fetch(`${BASE_URL}/users/${userId}`)
-  if (!res.ok) throw new Error(`Échec récupération profil (${res.status})`)
-  const u = await res.json()
+  const u = await httpClient(`${BASE_URL}/users/${userId}`)
   return {
     id: u.id,
     name: u.name,
