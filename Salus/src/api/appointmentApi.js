@@ -1,4 +1,18 @@
 const BASE_URL = 'https://jsonplaceholder.typicode.com'
+const LIMIT = 5
+
+export async function fetchAppointments() {
+  const res = await fetch(`${BASE_URL}/todos?_limit=${LIMIT}`)
+  if (!res.ok) throw new Error(`Échec récupération (${res.status})`)
+  const json = await res.json()
+  return json.map(item => ({
+    id: item.id,
+    name: item.title,
+    doctor: '',
+    date: '',
+    status: item.completed ? 'cancelled' : 'active',
+  }))
+}
 
 export async function cancelAppointment(id) {
   const res = await fetch(`${BASE_URL}/todos/${id}`, { method: 'DELETE' })
